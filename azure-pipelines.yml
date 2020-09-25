@@ -1,7 +1,5 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# Tm1637.NET Pipeline
+# VS Build + Nuget push into internal feed
 
 trigger:
 - master
@@ -10,8 +8,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-   major: 1
-   minor: 1
+   major: 0
+   minor: 0
 
 name: $(major).$(minor)$(Rev:.r)
 
@@ -35,5 +33,15 @@ steps:
     minorVersion: $(minor)
     patchVersion: $(Rev:.r)
     includeSymbols: true
-  
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'f1c97239-2d03-4f28-a017-2e548e9ff918'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'nuget'
+    publishLocation: 'Container'
 
