@@ -7,13 +7,15 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-   major: 0
-   minor: 0
-
-name: $(major).$(minor)$(Rev:.r)
+name: $(MajorVersion).$(MinorVersion).$(PatchVersion)
 
 steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host Building $(MajorVersion).$(MinorVersion).$(PatchVersion)
+    errorActionPreference: 'continue'
 - task: NuGetCommand@2
   inputs:
     command: 'restore'
@@ -28,9 +30,9 @@ steps:
     command: 'pack'
     packagesToPack: 'src/Tm1637.NET/Tm1637.NET.csproj'
     versioningScheme: 'byPrereleaseNumber'
-    majorVersion: $(major)
-    minorVersion: $(minor)
-    patchVersion: $(Rev:.r)
+    majorVersion: $(MajorVersion)
+    minorVersion: $(MinorVersion)
+    patchVersion: $(PatchVersion)
     includeSymbols: true
 - task: NuGetCommand@2
   inputs:
