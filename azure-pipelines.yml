@@ -1,0 +1,39 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+   major: 1
+   minor: 1
+
+name: $(major).$(minor)$(Rev:.r)
+
+steps:
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: 'Tm1637.NET.sln'
+    feedsToUse: 'select'
+- task: VSBuild@1
+  inputs:
+    solution: 'Tm1637.NET.sln'
+    vsVersion: '16.0'
+    configuration: 'Release'
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'src/Tm1637.NET/Tm1637.NET.csproj'
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: $(major)
+    minorVersion: $(minor)
+    patchVersion: $(Rev:.r)
+    includeSymbols: true
+  
+
