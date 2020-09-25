@@ -19,11 +19,10 @@ steps:
     command: 'restore'
     restoreSolution: 'Tm1637.NET.sln'
     feedsToUse: 'select'
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   inputs:
-    solution: 'Tm1637.NET.sln'
-    vsVersion: '16.0'
-    configuration: 'Release'
+    command: 'build'
+    projects: 'src/Tm1637.NET/Tm1637.NET.csproj'
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
