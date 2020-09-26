@@ -9,6 +9,8 @@ pool:
 
 variables:
 - group: Tm1637.NET Variables
+- name: PatchVersion
+  value: $[counter(format('{0}.{1}',variables['MajorVersion'],variables['MinorVersion']),0)]
 
 name: $(MajorVersion).$(MinorVersion).$(PatchVersion)
 
