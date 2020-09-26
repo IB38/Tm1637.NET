@@ -7,6 +7,9 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+- group: Tm1637.NET Variables
+
 name: $(MajorVersion).$(MinorVersion).$(PatchVersion)
 
 steps:
